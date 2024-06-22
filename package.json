@@ -1,0 +1,21 @@
+{
+  "name": "musicbot",
+  "version": "0.0.1",
+  "description": "basic and open-source discord music bot :D",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "discord"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.2"
+  }
+}
