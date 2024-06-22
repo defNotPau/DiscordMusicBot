@@ -30,8 +30,9 @@ def download(url,track_name):
     audio = video.audio
     #write the mp3
     audio.write_audiofile(track_name+".mp3")
-    os.remove(track_name+".mp4")
     audio.close()
+    os.remove(track_name+".mp4")
+    
     
 #the 4o4 page
 @app.route("/")
