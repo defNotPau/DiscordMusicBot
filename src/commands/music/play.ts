@@ -36,7 +36,8 @@ module.exports = {
     ],
 
     callback: async (client, interaction) => {
-        const requestedSong = interaction.options.get("Song").value;
+        const requestedSongName = interaction.options.get("Song").value;
+        const requestedSong = apiRequestExample(requestedSongName);
 
         // API request -> returns a list (5 element)
         // each element in the list another list being in the format [str: title, int: duration (in seconds), str: author(s)]

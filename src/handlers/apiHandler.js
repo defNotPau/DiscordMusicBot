@@ -1,8 +1,4 @@
-var interval
-var result = null;
 const XMLHttpRequest = require('xhr2');
-const { callback } = require('../commands/Aternos/stop');
-const { ThreadOnlyChannel } = require('discord.js');
 const Http = new XMLHttpRequest();
 
 const apiUrl = "http://127.0.0.1:5000/";
