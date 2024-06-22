@@ -59,9 +59,6 @@ def main(track_name,artist_name):
         #return file
         return Response(open(track_name+".mp3", "rb"), mimetype="audio/mpeg")
 
-    finally:
-        #clean up mp3
-        os.remove(track_name+".mp3")
 
 #add help route
 @app.route("/help")
