@@ -1,0 +1,6 @@
+requests
+re 
+moviepy
+pytube
+flask
+atexit
