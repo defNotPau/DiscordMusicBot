@@ -31,7 +31,6 @@ def download(url,track_name):
     #write the mp3
     audio.write_audiofile(track_name+".mp3")
     audio.close()
-    os.remove(track_name+".mp4")
     
     
 #the 4o4 page
