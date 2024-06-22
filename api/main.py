@@ -3,11 +3,10 @@ import re
 from moviepy.editor import *
 from pytube import YouTube
 import os
-import flask
-from flask import Response
+from flask import Response,Flask
 
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 
 #function to replace spaces with + for youtube query
 def replace_youtube(string):
