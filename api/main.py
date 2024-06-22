@@ -62,7 +62,7 @@ def main(track_name,artist_name):
 @app.route("/help")
 def help():
     #return help message
-    return "To get the mp3 file you go, serverip:5000/track_name/artist name and to add spaces just use a +"    
+    return "To get the mp3 file you go, serverip:5000/artist/track_name name and to add spaces just use a +"    
 
 
 if __name__ == '__main__':
