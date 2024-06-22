@@ -1,24 +1,38 @@
 import requests
+import re
+from moviepy.editor import *
+from pytube import YouTube
+import os
 
+#function to replace spaces with + for youtube query
+def replace_youtube(string):
+    main = string.split()
+    main_join = "+".join(main)
+    return main_join
 
-#function to open file
-main_file = open("api/auth_header.txt", "r")
-main_data = main_file.read()
+#donwload function for mp3
+def download(url):
+    link = YouTube(url)
+    stream = link.streams.get_lowest_resolution()
+    stream.download(filename=track_name+".mp4")
+    video = VideoFileClip(track_name+".mp4")
+    audio = video.audio
+    audio.write_audiofile(track_name+".mp3")
+    os.remove(track_name+".mp4")
 
-#main data for request(for example artist and song name)
+#main data for functions
 artist = input("Please state the artist: ")
 track_name = input("Please input the song name: ")
-headers = {
-    'Authorization': 'Bearer '+main_data,
-}
 
 
 
-#header and data
-request = "https://api.spotify.com/v1/search?q=+%2520track%3A"+track_name+"%2520artist%3A"+artist+"&type=track"
-request_data = requests.get(request, headers=headers)
-#store the main_request to a file
-request_file = open("api/request.txt", "w")
-request_file.write(request_data.text)
-request_file.close
-data = filter(track_name,request_data.text)
+#formulate the main query for youtube
+main_query = "https://www.youtube.com/results?search_query="+replace_youtube(artist)+"-"+replace_youtube(track_name)
+print(main_query)
+query_get = requests.get(main_query)
+video_id = re.findall(r"watch\?v=(\S{11})", query_get.text)
+video_link = "https://youtube.com/watch?v="+video_id[0]
+
+
+    
+download(video_link)
