@@ -3,3 +3,4 @@ re
 moviepy
 pytube
 flask
+mutagen
