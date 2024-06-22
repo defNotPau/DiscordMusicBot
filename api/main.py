@@ -1,5 +1,6 @@
 import requests
 
+
 #function to open file
 main_file = open("api/auth_header.txt", "r")
 main_data = main_file.read()
@@ -15,9 +16,9 @@ headers = {
 
 #header and data
 request = "https://api.spotify.com/v1/search?q=+%2520track%3A"+track_name+"%2520artist%3A"+artist+"&type=track"
-main_request = requests.get(request, headers=headers)
-
+request_data = requests.get(request, headers=headers)
 #store the main_request to a file
 request_file = open("api/request.txt", "w")
-request_file.write(main_request.text)
+request_file.write(request_data.text)
 request_file.close
+data = filter(track_name,request_data.text)
