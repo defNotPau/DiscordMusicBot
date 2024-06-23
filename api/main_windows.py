@@ -23,13 +23,13 @@ def download(url,track_name):
     link = YouTube(url)
     #set the lowest resolution(for faster download speed and it doesnt really matter cause its audio)
     stream = link.streams.get_lowest_resolution()
-    stream.download(filename=track_name+".mp4")
+    stream.download(filename="./api/output/"+track_name+".mp4")
     
     #convert video to audio
-    video = VideoFileClip(track_name+".mp4")
+    video = VideoFileClip("./api/output/"+track_name+".mp4")
     audio = video.audio
     #write the mp3
-    audio.write_audiofile(track_name+".mp3")
+    audio.write_audiofile("./api/output/"+track_name+".mp3")
     audio.close()
     
     
@@ -55,13 +55,9 @@ def main(track_name,artist_name):
     video_link = "https://youtube.com/watch?v="+video_id[0]
     #use try so you can clean up the mp3
     download(video_link,track_name)
-    try:
-        #return file
-        return Response(open(track_name+".mp3", "rb"), mimetype="audio/mpeg")
 
-    finally:
-        #clean up mp3
-        os.remove(track_name+".mp3")
+    return Response(open("./api/output/"+track_name+".mp3", "rb"), mimetype="audio/mpeg")
+
 
 #add help route
 @app.route("/help")
@@ -73,23 +69,27 @@ def help():
 def info(track_name,artist):
     main_query = "https://www.youtube.com/results?search_query="+replace_youtube(artist)+"-"+replace_youtube(track_name)
     query_get = requests.get(main_query)
+
     #search for video id in response
     video_id = re.findall(r"watch\?v=(\S{11})", query_get.text)
+
     #make a youtube video link
     video_link = "https://youtube.com/watch?v="+video_id[0]
+
     #donwload the video to get the duration
     download(video_link,track_name)
+
     #get all the info
     video_name = re.findall(track_name, query_get.text)
     video_artist = re.findall(artist, query_get.text)
+
     #get the duration of the mp3
-    audio = MP3(track_name+".mp3")
+    audio = MP3("./api/output/"+track_name+".mp3")
     audio_info = audio.info
     lenght = int(audio_info.length)
     mins = lenght // 60
     secs  = str(lenght)
-    #remove the mp3
-    os.remove(track_name+".mp3")
+
     #return the data
     return str(video_artist[0])+"-"+str(video_name[0])+" "+str(mins)+":"+secs[:-1]
 
