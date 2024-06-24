@@ -18,10 +18,6 @@ def replace_youtube(string):
     #replace the whitespace with a + for youtube
     main_join = "+".join(main)
     return main_join
-def split_spaces(string):
-    main = string.replace("+", " ")
-    main_join = main.split()
-    return main_join
     
 #function for downloading file
 def download(url,track_name):
@@ -44,7 +40,7 @@ def four():
     return("Ooops, this page doesnt exist go to /help to see existing pages")
 #main app route
 @app.route("/download/<artist_name>/<track_name>")
-def main(track_name,artist_name):
+def main_download(track_name,artist_name):
     #artist name
     artist = artist_name
     #track name
@@ -59,16 +55,6 @@ def main(track_name,artist_name):
     video_link = "https://youtube.com/watch?v="+video_id[0]
     download(video_link,track_name)
     return flask.send_file("../"+track_name+".mp3", mimetype="audio/mpeg")
-        
-
-
-
-
-       
-
-    
-
-       
         
 
 
@@ -103,9 +89,11 @@ def info(track_name,artist):
         track = " ".join(track_name_split)
     elif track_name.find("+") == -1:
         pass 
-    
-    video_name = re.findall(str(track), query_get.text)
-    video_artist = re.findall(str(artist_name), query_get.text)
+    try:
+        video_name = re.findall(str(track), query_get.text)
+        video_artist = re.findall(str(artist_name), query_get.text)
+    except:
+        return("Could not find song")
     print(artist)
     #get the duration of the mp3
     audio = MP3(track_name+".mp3")
