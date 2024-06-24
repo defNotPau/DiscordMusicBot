@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle, CommandInteraction, EmbedBuilder, Interaction } from "discord.js"
+const { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle, CommandInteraction, EmbedBuilder } = require("discord.js")
 
 function apiRequestExample(songName: string) {
     var toReturnArray : Array<Array<any>> = [];
@@ -55,57 +55,5 @@ module.exports = {
                 { name: `4: ${requestedSong[3][0]}`, value: `${secToNicer(requestedSong[3][1])} - ${requestedSong[3][2]}`},
                 { name: `5: ${requestedSong[4][0]}`, value: `${secToNicer(requestedSong[4][1])} - ${requestedSong[4][2]}`}
             );
-
-        const option1 = new ButtonBuilder()
-            .setCustomId('1')
-            .setLabel("1")
-            .setStyle(ButtonStyle.Primary);
-
-        const option2 = new ButtonBuilder()
-            .setCustomId('2')
-            .setLabel("2")
-            .setStyle(ButtonStyle.Primary);
-        
-        const option3 = new ButtonBuilder()
-            .setCustomId('3')
-            .setLabel("3")
-            .setStyle(ButtonStyle.Primary);
-
-        const option4 = new ButtonBuilder()
-            .setCustomId('4')
-            .setLabel("4")
-            .setStyle(ButtonStyle.Primary);
-
-        const option5 = new ButtonBuilder()
-            .setCustomId('5')
-            .setLabel("5")
-            .setStyle(ButtonStyle.Primary);
-
-        const cancel = new ButtonBuilder()
-            .setCustomId('cancel')
-            .setLabel("❌")
-            .setStyle(ButtonStyle.Danger);
-
-        const row = new ActionRowBuilder<ButtonBuilder>()
-            .addComponents(option1, option2, option3, option4, option5, cancel);
-
-        await interaction.reply({ embeds: [optionsEmbed], components: [row],  ephemeral: true });
-
-        const filter = (i: Interaction) => i.isButton() && i.user.id === interaction.user.id;
-        const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000 });
-
-        collector.on('collect', async i => {
-            if (i.customId === "cancel") {
-                await i.reply({ content: 'Operación cancelada.', ephemeral: true });
-                collector.stop();
-            } else {
-                // more stuff to be added once the API is finished...
-
-                const selectedOption : number = Number(i.customId);
-
-                // take that option and like idk do stuff with it so the bot thingy starts playing it on whatever channel u r on
-                await i.reply(`Now playing: ${requestedSong[selectedOption][0]} by ${requestedSong[selectedOption][1]}`);
-            }
-        });
     }
 }
