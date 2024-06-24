@@ -82,6 +82,7 @@ def info(track_name,artist):
     #get all the info
     artist_name = artist
     track = track_name
+    #space parsing
     if artist.find("+") !=-1:
         artist_replace = artist.replace("+", " ")
         artist_split = artist_replace.split()
@@ -93,7 +94,8 @@ def info(track_name,artist):
         track_name_split = track_name_replace.split()
         track = " ".join(track_name_split)
     elif track_name.find("+") == -1:
-        pass 
+        pass
+    #exception handling 
     try:
         video_name = re.findall(str(track), query_get.text)
         video_artist = re.findall(str(artist_name), query_get.text)
