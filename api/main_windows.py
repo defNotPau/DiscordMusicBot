@@ -3,8 +3,9 @@ import regex as re
 from moviepy.editor import *
 from pytube import YouTube
 import os
-from flask import Response,Flask
+from flask import Response,Flask, stream_with_context
 from mutagen.mp3 import MP3
+import flask
 
 
 
@@ -17,7 +18,11 @@ def replace_youtube(string):
     #replace the whitespace with a + for youtube
     main_join = "+".join(main)
     return main_join
-
+def split_spaces(string):
+    main = string.replace("+", " ")
+    main_join = main.split()
+    return main_join
+    
 #function for downloading file
 def download(url,track_name):
     link = YouTube(url)
@@ -31,13 +36,12 @@ def download(url,track_name):
     #write the mp3
     audio.write_audiofile(track_name+".mp3")
     audio.close()
-    
-    
+    video.close()
+    os.remove(track_name+".mp4")
 #the 4o4 page
 @app.route("/")
 def four():
     return("Ooops, this page doesnt exist go to /help to see existing pages")
-
 #main app route
 @app.route("/download/<artist_name>/<track_name>")
 def main(track_name,artist_name):
@@ -53,11 +57,19 @@ def main(track_name,artist_name):
     video_id = re.findall(r"watch\?v=(\S{11})", query_get.text)
     #make a youtube video link
     video_link = "https://youtube.com/watch?v="+video_id[0]
-    #use try so you can clean up the mp3
     download(video_link,track_name)
-    try:
-        #return file
-        return Response(open(track_name+".mp3", "rb"), mimetype="audio/mpeg")
+    return flask.send_file("../"+track_name+".mp3", mimetype="audio/mpeg")
+        
+
+
+
+
+       
+
+    
+
+       
+        
 
 
 #add help route
@@ -77,8 +89,24 @@ def info(track_name,artist):
     #donwload the video to get the duration
     download(video_link,track_name)
     #get all the info
-    video_name = re.findall(track_name, query_get.text)
-    video_artist = re.findall(artist, query_get.text)
+    artist_name = artist
+    track = track_name
+    if artist.find("+") !=-1:
+        artist_replace = artist.replace("+", " ")
+        artist_split = artist_replace.split()
+        artist_name = " ".join(artist_split)
+    elif artist.find("+") ==-1:
+        pass
+    if track_name.find("+") !=-1:
+        track_name_replace = track_name.replace("+", " ")
+        track_name_split = track_name_replace.split()
+        track = " ".join(track_name_split)
+    elif track_name.find("+") == -1:
+        pass 
+    
+    video_name = re.findall(str(track), query_get.text)
+    video_artist = re.findall(str(artist_name), query_get.text)
+    print(artist)
     #get the duration of the mp3
     audio = MP3(track_name+".mp3")
     audio_info = audio.info
@@ -92,4 +120,4 @@ def info(track_name,artist):
 
 #start the app
 if __name__ == '__main__':
-   app.run()
+   app.run(debug=True)
