@@ -79,8 +79,22 @@ def info(track_name,artist):
     #donwload the video to get the duration
     download(video_link,track_name)
     #get all the info
-    video_name = re.findall(track_name, query_get.text)
-    video_artist = re.findall(artist, query_get.text)
+    artist_name = artist
+    track_name_main = track_name
+    if artist.find("+") !=-1:
+        artist_replace = artist.replace("+", " ")
+        artist_split = artist_replace.split()
+        artist_name = " ".join(artist_split)
+    elif artist.find("+") ==-1:
+        pass
+    if track_name.find("+") !=-1:
+        track_name_replace = track_name.replace("+", " ")
+        track_name_split = track_name_replace.split()
+        track_name_main = " ".join(track_name_split)
+    elif track_name.find("+") == -1:
+        pass
+    video_name = re.findall(track_name_main, query_get.text)
+    video_artist = re.findall(artist_name, query_get.text)
     #get the duration of the mp3
     audio = MP3(track_name+".mp3")
     audio_info = audio.info
