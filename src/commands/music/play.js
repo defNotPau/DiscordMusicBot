@@ -1,18 +1,16 @@
 const { ApplicationCommandOptionType, EmbedBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-const { devs } = require("../../../config.json");
 
-function apiRequestExample(songName) {
-    return [`${songName}`, 90, "John Doe"];
+function apiRequestExample(songName, artist) {
+    if (artist) { return [songName, '2:30', artist]; }
+    return [songName, '2:30', 'unknown_artist'];
 }
 
-const option1 = new ButtonBuilder()
-    .setStyle(ButtonStyle.Primary).setCustomId('1').setLabel('1');
+function findSong(songName) {
 
-const option2 = new ButtonBuilder()
-    .setStyle(ButtonStyle.Primary).setCustomId('2').setLabel('2');
-        
-const option3 = new ButtonBuilder()
-    .setStyle(ButtonStyle.Primary).setCustomId('3').setLabel('3');
+}
+
+const confirm = new ButtonBuilder()
+    .setStyle(ButtonStyle.Primary).setCustomId('confirm').setLabel('✅');
 
 const cancel = new ButtonBuilder()
     .setStyle(ButtonStyle.Primary).setCustomId('cancel').setLabel('❌');
@@ -26,6 +24,11 @@ module.exports = {
             description: "The name of the song you would like to play",
             type: ApplicationCommandOptionType.String,
             required: true
+        },
+        {
+            name: "artist",
+            description: "Artist of the song you want to play",
+            type: ApplicationCommandOptionType.String,
         }
     ],
 
@@ -43,14 +46,13 @@ module.exports = {
             .setDescription("Select one of the found options, or cancel ;c \n you have a minute to answer which one")
             .setTimestamp()
             .addFields(
-                { name: `1: ${requestedSong[0][0]}`, value: `${secToNicer(requestedSong[0][1])} - by: ${requestedSong[0][2]}`},
-                { name: `2: ${requestedSong[1][0]}`, value: `${secToNicer(requestedSong[1][1])} - by: ${requestedSong[1][2]}`},
-                { name: `3: ${requestedSong[2][0]}`, value: `${secToNicer(requestedSong[2][1])} - by: ${requestedSong[2][2]}`}
+                { name: `1: ${requestedSong[0]}`, value: `${secToNicer(requestedSong[1])} - by: ${requestedSong[2]}`}
+                
             );
 
         const row = new ActionRowBuilder()
-			.addComponents(option1, option2, option3, cancel);
-        
+			.addComponents(confirm, cancel);
+    
         await interaction.reply({
             embeds: [optionsEmbed],
             components: [row]
@@ -59,6 +61,10 @@ module.exports = {
         const collectorFilter = i => i.user.id === interaction.user.id;
         try {
             const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
+
+            if (confirmation.customId === 'confirm') {
+
+            }
         } catch(e) {
             await interaction.reply({ content: 'Confirmation not received within 1 minute, cancelling', ephemeral: true, content: [] });
         }
