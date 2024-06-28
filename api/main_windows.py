@@ -30,10 +30,10 @@ def download(url,track_name):
     video = VideoFileClip("./api/output/"+track_name+".mp4")
     audio = video.audio
     #write the mp3
-    audio.write_audiofile("./api/output/"+track_name+".mp3")
+    audio.write_audiofile("../api/output/"+track_name+".mp3")
     audio.close()
     video.close()
-    os.remove(track_name+".mp4")
+    os.remove("../api/output/"+track_name+".mp4")
 #the 4o4 page
 @app.route("/")
 def four():
@@ -54,10 +54,8 @@ def main_download(track_name,artist_name):
     #make a youtube video link
     video_link = "https://youtube.com/watch?v="+video_id[0]
     download(video_link,track_name)
-    return flask.send_file("../"+track_name+".mp3", mimetype="audio/mpeg")
-        
-
-    return Response(open("./api/output/"+track_name+".mp3", "rb"), mimetype="audio/mpeg")
+    return flask.send_file("./api/output/"+track_name+".mp3", mimetype="audio/mpeg")
+    
 
 #add help route
 @app.route("/help")
@@ -84,14 +82,18 @@ def info(track_name,artist):
     track = track_name
     #space parsing
     if artist.find("+") !=-1:
+        #replace the spaces with a + for youtube
         artist_replace = artist.replace("+", " ")
         artist_split = artist_replace.split()
+        #join the string
         artist_name = " ".join(artist_split)
     elif artist.find("+") ==-1:
         pass
     if track_name.find("+") !=-1:
+        #same function as the artist.find
         track_name_replace = track_name.replace("+", " ")
         track_name_split = track_name_replace.split()
+        #join the string
         track = " ".join(track_name_split)
     elif track_name.find("+") == -1:
         pass
@@ -103,9 +105,8 @@ def info(track_name,artist):
         return("Could not find song")
     print(artist)
     #get the duration of the mp3
-    audio = MP3("./api/output/"+track_name+".mp3")
-    audio_info = audio.info
-    lenght = int(audio_info.length)
+    audio = MP3("../api/output/"+track_name+".mp3")
+    lenght = int(audio.info.length)
     mins = lenght // 60
     secs  = str(lenght)
 
