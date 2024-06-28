@@ -28,7 +28,7 @@ def download(url,track_name):
     audio.write_audiofile("./api/output/"+track_name+".mp3")
     audio.close()
     video.close()
-    os.remove(track_name+".mp4")
+    os.remove("./api/output/"+track_name+".mp4")
 
     seconds = link.length
 
@@ -46,7 +46,7 @@ def main_download(track_name):
 
     video_link = "https://youtube.com/watch?v="+video_id[0]
     video_info = download(video_link,track_name)
-    jsondic = {"name": video_info[0],"author":video_info[2]}
+    jsondic = {"name": video_info[0],"duration": video_info[1],"author":video_info[2]}
     
     return (json.dumps(jsondic))
 
