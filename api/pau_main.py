@@ -46,7 +46,7 @@ def main_download(track_name):
 
     video_link = "https://youtube.com/watch?v="+video_id[0]
     video_info = download(video_link,track_name)
-    jsondic = {"name": video_info[0],"duration": video_info[1],"author":video_info[2]}
+    jsondic = {"name": str(video_info[0].encode(encoding="ascii",errors="xmlcharrefreplace")).strip("b'"),"duration": video_info[1],"author":str(video_info[2].encode(encoding="ascii",errors="xmlcharrefreplace")).strip("b'"), "id": track_name}
     
     return (json.dumps(jsondic))
 
@@ -58,9 +58,10 @@ def full_download(track_name, artist_name):
     video_id = re.findall(r"watch\?v=(\S{11})", query_get.text)
 
     video_link = "https://youtube.com/watch?v="+video_id[0]
-    video_name = download(video_link,track_name)
+    video_info = download(video_link,track_name)
+    jsondic = {"name": str(video_info[0].encode(encoding="ascii",errors="xmlcharrefreplace")).strip("b'"),"duration": video_info[1],"author": str(video_info[2].encode(encoding="ascii",errors="xmlcharrefreplace")).strip("b'"), "id": track_name}
 
-    return flask.send_file("../"+track_name+".mp3", mimetype="audio/mpeg")
+    return (json.dumps(jsondic))
 
 if __name__ == '__main__':
    app.run(debug=True)
