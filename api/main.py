@@ -1,3 +1,4 @@
+#import necessary comments
 import requests
 import re
 from moviepy.editor import *
@@ -96,7 +97,7 @@ def info(track_name,artist):
     video_name = re.findall(track_name_main, query_get.text)
     video_artist = re.findall(artist_name, query_get.text)
     #get the duration of the mp3
-    audio = MP3(track_name+".mp3")
+    audio = MP3("../api/output"+track_name+".mp3")
     audio_info = audio.info
     lenght = int(audio_info.length)
     mins = lenght // 60
