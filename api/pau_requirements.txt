@@ -1,0 +1,7 @@
+requests
+regex
+moviepy
+pytube
+os
+flask
+json

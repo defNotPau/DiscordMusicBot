@@ -3,9 +3,7 @@ import regex as re
 from moviepy.editor import *
 from pytube import YouTube
 import os
-from flask import Response,Flask, stream_with_context
-from mutagen.mp3 import MP3
-import flask
+from flask import Flask
 import json
 
 app = Flask(__name__)
