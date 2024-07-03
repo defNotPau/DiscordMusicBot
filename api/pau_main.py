@@ -3,6 +3,7 @@ import regex as re
 from moviepy.editor import *
 from pytube import YouTube
 import os
+import os.path
 from flask import Flask
 import json
 
@@ -16,6 +17,15 @@ def yformat(data):
 
 def download(url,track_name):
     link = YouTube(url)
+    seconds = link.length
+    minutes = seconds // 60
+    remaining_seconds = seconds % 60
+
+    print(os.path.exists(f"./api/output/{track_name}.mp3"))
+
+    if os.path.exists(f"./api/output/{track_name}.mp3") == True:
+        print('e')
+        return (link.title, f"{minutes:02}:{remaining_seconds:02}", link.author)
 
     stream = link.streams.get_lowest_resolution()
     stream.download(filename="./api/output/"+track_name+".mp4")
@@ -27,11 +37,6 @@ def download(url,track_name):
     audio.close()
     video.close()
     os.remove("./api/output/"+track_name+".mp4")
-
-    seconds = link.length
-
-    minutes = seconds // 60
-    remaining_seconds = seconds % 60
 
     return (link.title, f"{minutes:02}:{remaining_seconds:02}", link.author)
 

@@ -5,19 +5,36 @@ const apiUrl = "http://127.0.0.1:5000/download";
 
 module.exports = async (track, artist) => {
     if (artist) { 
-        const RequestURL = new URL((`${track}/${artist}`), apiUrl);
+        var RequestURL = apiUrl + `/${track}/${artist}`;
     } else {
-        const RequestURL = new URL((`${track}`), apiUrl);
+        var RequestURL = apiUrl + `/${track}`;
     }
 
-    Http.open("GET", RequestURL);
+    Http.open("GET", RequestURL, true);
     Http.send();
 
     Http.responseType = "json";
+    
+    Http.readyStateChange = function() {
+        function check() {
+            setTimeout(function () {
+              if (Http.response == undefined) {
+                console.log('undefined >:(')
+                check();
+              } else {
+                console.log('maybe not undefined :)')
+                return;
+              }
+            }, 500);
+        };
+        check();
 
-    if (Http.responseText) {
-        return Http.responseText;
-    } else {
-        return 'error ;c';
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                return JSON.parse(Http.response);
+            } else {
+            console.error("Error: " + Http.status);
+            }
+        }
     }
 }
