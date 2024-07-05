@@ -26,10 +26,12 @@ module.exports = {
 
     callback: async (client, interaction) => {
         if (interaction.options.getString("artist")) {
-            var requestedSong = await apiHandler(interaction.options.getString("song"), interaction.options.getString("artist"));
+            var requestedSong = await apiHandler("GET", interaction.options.getString("song"), interaction.options.getString("artist"));
         } else {
-            var requestedSong = await apiHandler(interaction.options.getString("song"));
+            var requestedSong = await apiHandler("GET", interaction.options.getString("song"));
         }
+
+        if (!requestedSong) { interaction.reply({contents: "Error... contact devs :D", ephemeral: true}); };
 
         const optionsEmbed = new EmbedBuilder()
             .setColor(0x0099FF)
@@ -38,7 +40,6 @@ module.exports = {
             .setTimestamp()
             .addFields(
                 { name: `${requestedSong.name}`, value: `${requestedSong.duration} | by: ${requestedSong.author}`}
-                
             );
 
         const row = new ActionRowBuilder()
@@ -56,7 +57,13 @@ module.exports = {
             if (confirmation.customId === 'confirm') {
 
             }
+
+            if (confirmation.customId === 'cancel') {
+                apiHandler("DEL", requestedSong.id);
+                confirmation.update({ content: 'Action cancelled', components: [] });
+            }
         } catch(e) {
+            apiHandler("DEL", requestedSong.id);
             await interaction.reply({ content: 'Confirmation not received within 1 minute, cancelling', ephemeral: true, content: [] });
         }
     }
