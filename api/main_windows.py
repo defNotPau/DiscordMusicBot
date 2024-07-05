@@ -24,16 +24,16 @@ def download(url,track_name):
     link = YouTube(url)
     #set the lowest resolution(for faster download speed and it doesnt really matter cause its audio)
     stream = link.streams.get_lowest_resolution()
-    stream.download(filename="./api/output/"+track_name+".mp4")
+    stream.download(filename=track_name+".mp4")
     
     #convert video to audio
-    video = VideoFileClip("./api/output/"+track_name+".mp4")
+    video = VideoFileClip(track_name+".mp4")
     audio = video.audio
     #write the mp3
-    audio.write_audiofile("../api/output/"+track_name+".mp3")
+    audio.write_audiofile(track_name+".mp3")
     audio.close()
     video.close()
-    os.remove("../api/output/"+track_name+".mp4")
+    os.remove(track_name+".mp4")
 #the 4o4 page
 @app.route("/")
 def four():
@@ -54,7 +54,7 @@ def main_download(track_name,artist_name):
     #make a youtube video link
     video_link = "https://youtube.com/watch?v="+video_id[0]
     download(video_link,track_name)
-    return flask.send_file("./api/output/"+track_name+".mp3", mimetype="audio/mpeg")
+    return flask.send_file(track_name+".mp3", mimetype="audio/mpeg")
     
 
 #add help route
@@ -105,7 +105,7 @@ def info(track_name,artist):
         return("Could not find song")
     print(artist)
     #get the duration of the mp3
-    audio = MP3("../api/output/"+track_name+".mp3")
+    audio = MP3(track_name+".mp3")
     lenght = int(audio.info.length)
     mins = lenght // 60
     secs  = str(lenght)
