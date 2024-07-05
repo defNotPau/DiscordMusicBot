@@ -1,13 +1,5 @@
-const { ApplicationCommandOptionType, EmbedBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-
-function apiRequestExample(songName, artist) {
-    if (artist) { return [songName, '2:30', artist]; }
-    return [songName, '2:30', 'unknown_artist'];
-}
-
-function findSong(songName) {
-
-}
+const { ApplicationCommandOptionType, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const apiHandler = require('./../../handlers/apiHandler');
 
 const confirm = new ButtonBuilder()
     .setStyle(ButtonStyle.Primary).setCustomId('confirm').setLabel('✅');
@@ -33,20 +25,19 @@ module.exports = {
     ],
 
     callback: async (client, interaction) => {
-        const requestedSong = apiRequestExample(interaction.options.getString("Song"));
-        if (!requestedSong[2]) { interaction.reply({content: "ehhhhhh... sorry, something happened ;c"}) }
+        if (interaction.options.getString("artist")) {
+            var requestedSong = await apiHandler(interaction.options.getString("song"), interaction.options.getString("artist"));
+        } else {
+            var requestedSong = await apiHandler(interaction.options.getString("song"));
+        }
 
-        // API request -> returns a list (5 element)
-        // each element in the list another list being in the format [str: title, int: duration (in seconds), str: author(s)]
-
-        // create embed with the options found
         const optionsEmbed = new EmbedBuilder()
             .setColor(0x0099FF)
-            .setTitle(`You serched for: ${requestedSong}`)
-            .setDescription("Select one of the found options, or cancel ;c \n you have a minute to answer which one")
+            .setTitle(`You serched for: ${requestedSong.id}`)
+            .setDescription("Select confirm, or cancel ;c")
             .setTimestamp()
             .addFields(
-                { name: `1: ${requestedSong[0]}`, value: `${secToNicer(requestedSong[1])} - by: ${requestedSong[2]}`}
+                { name: `${requestedSong.name}`, value: `${requestedSong.duration} | by: ${requestedSong.author}`}
                 
             );
 

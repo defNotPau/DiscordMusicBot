@@ -14,6 +14,4 @@ const client = new Client({
 
 eventHandler(client);
 
-console.log(apiHandler("Matsuri"));
-
 client.login(process.env.TOKEN);
