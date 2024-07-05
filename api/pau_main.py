@@ -38,9 +38,18 @@ def download(url,track_name):
 
     return (link.title, f"{minutes:02}:{remaining_seconds:02}", link.author)
 
-@app.route("/test")
-def test():
-     return "kinda workind :)"
+@app.route("/delete/<id>")
+def delateFile(id):
+    _file = "./api/output/"+id+".mp3"
+
+    _file.close()
+    os.remove("./api/output/"+id+".mp3")
+
+    if (os.path.exists(f"./api/output/{id}.mp3")):
+        return False
+    else:
+        return True
+
 
 @app.route("/download/<track_name>")
 def main_download(track_name):

@@ -26,10 +26,12 @@ module.exports = {
 
     callback: async (client, interaction) => {
         if (interaction.options.getString("artist")) {
-            var requestedSong = await apiHandler(interaction.options.getString("song"), interaction.options.getString("artist"));
+            var requestedSong = await apiHandler(interaction.options.getString("song"), interaction.options.getString("artist"), false);
         } else {
-            var requestedSong = await apiHandler(interaction.options.getString("song"));
+            var requestedSong = await apiHandler(interaction.options.getString("song"), false);
         }
+
+        if (!requestedSong) { interaction.reply("Error... contact devs :D"); };
 
         const optionsEmbed = new EmbedBuilder()
             .setColor(0x0099FF)
@@ -38,12 +40,13 @@ module.exports = {
             .setTimestamp()
             .addFields(
                 { name: `${requestedSong.name}`, value: `${requestedSong.duration} | by: ${requestedSong.author}`}
-                
             );
 
         const row = new ActionRowBuilder()
 			.addComponents(confirm, cancel);
-    
+        
+        await interaction.deferReply();
+        await wait(5_000);
         await interaction.reply({
             embeds: [optionsEmbed],
             components: [row]
@@ -56,8 +59,14 @@ module.exports = {
             if (confirmation.customId === 'confirm') {
 
             }
+
+            if (confirmation.customId === 'cancel') {
+                apiHandler(requestedSong.id, true);
+                confirmation.update({ content: 'Action cancelled', components: [] });
+            }
         } catch(e) {
-            await interaction.reply({ content: 'Confirmation not received within 1 minute, cancelling', ephemeral: true, content: [] });
+            apiHandler(requestedSong.id, true);
+            await interaction.reply({ content: 'Confirmation not received within 1 minute, cancelling', ephemeral: true, components: [] });
         }
     }
 }
