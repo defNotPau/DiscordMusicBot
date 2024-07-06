@@ -62,17 +62,17 @@ module.exports = {
 
             if (confirmation.customId === 'confirm') {
                 if (!interaction.member.voice.channel) return interaction.reply("You need to be in a Voice Channel to play a song.");
-                const song_resource = createAudioResource(`./../../api/output/${requestedSong.id}.mp3`);
+                const song_resource = createAudioResource(`./../../../api/output/${requestedSong.id}.mp3`);
                 
                 const player = createAudioPlayer();
                 const connection = joinVoiceChannel({
                     channelId: interaction.member.voice.channelId,
                     guildId: interaction.guildId,
                     adapterCreator: interaction.guild.voiceAdapterCreator
-                }).subscribe(player);
+                });
                 
-                interaction.guild.me.voice.setRequestToSpeak(true);
                 player.play(song_resource);
+                connection.subscribe(player);
             }
 
             if (confirmation.customId === 'cancel') {
