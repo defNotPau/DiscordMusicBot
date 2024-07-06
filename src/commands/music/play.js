@@ -5,7 +5,7 @@ const confirm = new ButtonBuilder()
     .setStyle(ButtonStyle.Primary).setCustomId('confirm').setLabel('✅');
 
 const cancel = new ButtonBuilder()
-    .setStyle(ButtonStyle.Primary).setCustomId('cancel').setLabel('❌');
+    .setStyle(ButtonStyle.Secondary).setCustomId('cancel').setLabel('❌');
 
 module.exports = {
     name: "play",
@@ -25,6 +25,8 @@ module.exports = {
     ],
 
     callback: async (client, interaction) => {
+        await interaction.deferReply();
+
         if (interaction.options.getString("artist")) {
             var requestedSong = await apiHandler(interaction.options.getString("song"), interaction.options.getString("artist"), false);
         } else {
@@ -35,7 +37,7 @@ module.exports = {
 
         const optionsEmbed = new EmbedBuilder()
             .setColor(0x0099FF)
-            .setTitle(`You serched for: ${requestedSong.id}`)
+            .setTitle(`You serched for: ${(requestedSong.id).replaceAll("+", " ")}`)
             .setDescription("Select confirm, or cancel ;c")
             .setTimestamp()
             .addFields(
@@ -45,28 +47,29 @@ module.exports = {
         const row = new ActionRowBuilder()
 			.addComponents(confirm, cancel);
         
-        await interaction.deferReply();
-        await wait(5_000);
-        await interaction.reply({
+        const response = await interaction.editReply({
             embeds: [optionsEmbed],
             components: [row]
         });
 
         const collectorFilter = i => i.user.id === interaction.user.id;
         try {
-            const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
+            const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000});
+
+            await confirmation.deferReply();
 
             if (confirmation.customId === 'confirm') {
 
             }
 
             if (confirmation.customId === 'cancel') {
-                apiHandler(requestedSong.id, true);
-                confirmation.update({ content: 'Action cancelled', components: [] });
+                // await apiHandler(requestedSong.id, true);
+                await confirmation.editReply({ content: 'Action cancelled', components: [] });
             }
         } catch(e) {
-            apiHandler(requestedSong.id, true);
-            await interaction.reply({ content: 'Confirmation not received within 1 minute, cancelling', ephemeral: true, components: [] });
+            // await apiHandler(requestedSong.id, true);
+            console.log(e);
+            await interaction.editReply({ content: 'Error, song will be deleted due to this', components: [] });
         }
     }
 }
