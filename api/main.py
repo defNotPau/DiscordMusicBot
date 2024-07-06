@@ -32,6 +32,7 @@ def download(url,track_name):
     #write the mp3
     audio.write_audiofile(track_name+".mp3")
     os.remove(track_name+".mp4")
+    print(stream.title)
     
 #the 4o4 page
 @app.route("/")

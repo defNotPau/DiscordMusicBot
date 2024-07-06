@@ -34,6 +34,8 @@ def download(url,track_name):
     audio.close()
     video.close()
     os.remove("../api/output/"+track_name+".mp4")
+    print(stream.title)
+    print(stream.author)
 #the 4o4 page
 @app.route("/")
 def four():
