@@ -1,4 +1,6 @@
 const { ApplicationCommandOptionType, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require("@discordjs/voice");
+
 const apiHandler = require('./../../handlers/apiHandler');
 
 const confirm = new ButtonBuilder()
@@ -59,17 +61,29 @@ module.exports = {
             await confirmation.deferReply();
 
             if (confirmation.customId === 'confirm') {
-
+                if (!interaction.member.voice.channel) return interaction.reply("You need to be in a Voice Channel to play a song.");
+                const song_resource = createAudioResource(`./../../api/output/${requestedSong.id}.mp3`);
+                
+                const player = createAudioPlayer();
+                const connection = joinVoiceChannel({
+                    channelId: interaction.member.voice.channelId,
+                    guildId: interaction.guildId,
+                    adapterCreator: interaction.guild.voiceAdapterCreator
+                }).subscribe(player);
+                
+                interaction.guild.me.voice.setRequestToSpeak(true);
+                player.play(song_resource);
             }
 
             if (confirmation.customId === 'cancel') {
                 // await apiHandler(requestedSong.id, true);
-                await confirmation.editReply({ content: 'Action cancelled', components: [] });
+                await confirmation.editReply({ content: 'Canceled D:', components: [] });
             }
         } catch(e) {
             // await apiHandler(requestedSong.id, true);
             console.log(e);
-            await interaction.editReply({ content: 'Error, song will be deleted due to this', components: [] });
+            await interaction.editReply({ content: "Time's up >:) \n or there was an error... if you think so, ask the developers :D", components: [] });
         }
     }
 }
+
