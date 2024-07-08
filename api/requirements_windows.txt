@@ -2,6 +2,6 @@ requests
 regex
 moviepy
 pytube
-flask
-mutagen
 os
+flask
+json
