@@ -1,7 +1,6 @@
 require('dotenv').config();
 const { Client, IntentsBitField } = require('discord.js');
 const eventHandler = require('./handlers/eventHandler');
-const apiHandler = require('./handlers/apiHandler');
 
 const client = new Client({
   intents: [
@@ -9,6 +8,7 @@ const client = new Client({
     IntentsBitField.Flags.GuildMembers,
     IntentsBitField.Flags.GuildMessages,
     IntentsBitField.Flags.MessageContent,
+    IntentsBitField.Flags.GuildVoiceStates
   ],
 });
 
