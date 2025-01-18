@@ -1,8 +1,6 @@
 import requests
 import regex as re
-from moviepy.editor import *
-from pytube import YouTube
-import os
+from pytubefix import YouTube
 from flask import Flask
 import flask
 import json
@@ -23,17 +21,8 @@ def ytformat(string):
 def download(url,track_name):
     link = YouTube(url)
     #set the lowest resolution(for faster download speed and it doesnt really matter cause its audio)
-    stream = link.streams.get_lowest_resolution()
+    stream = link.streams.get_audio_only()
     stream.download(filename=track_name+".mp4")
-    
-    #convert video to audio
-    video = VideoFileClip(track_name+".mp4")
-    audio = video.audio
-    #write the mp3
-    audio.write_audiofile(track_name+".mp3")
-    audio.close()
-    video.close()
-    os.remove(track_name+".mp4")
     print(link.author)
 #the 4o4 page
 @app.route("/")
@@ -48,17 +37,15 @@ def main_download(track_name,artist_name,result):
         #track name
         track_name = track_name
         #formulate the main search query for youtube
-        main_query = "https://www.youtube.com/results?search_query="+ytformat(artist)+"-"+ytformat(track_name)
-        query_get = requests.get(main_query)
-        
+        query_get = requests.get("https://www.youtube.com/results?search_query="+ytformat(artist)+"-"+ytformat(track_name))
         #search for video id in response
         video_id = re.search(r"watch\?v=(\S{11})", query_get.text)
         #make a youtube video link
         video_link = "https://youtube.com/watch?v="+video_id[int(result)]
         download(video_link,track_name)
-        return flask.send_file("../"+track_name+".mp3", mimetype="audio/mpeg")
+        return flask.send_file("../"+track_name+".m4a", mimetype="audio/mpeg")
     except KeyError:
-        return str(-1)
+        return "ERROR, contact the devs"
    
 
 #add help route
@@ -96,9 +83,6 @@ def info(track_name,artist,result):
     }
     #return the data
     return json.dumps(data)
-@app.route("/del/<id>")
-def delete(id):
-    os.remove(id)
 #start the app
 if __name__ == '__main__':
    app.run(debug=True)
