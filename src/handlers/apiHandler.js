@@ -1,15 +1,12 @@
 const apiUrl = "http://127.0.0.1:5000/";
 
-module.exports = async (track, artist, del) => {
+module.exports = async (track, artist) => {
 
     if (artist) { 
-        var RequestURL = new URL(`download/${String(track).replaceAll(" ", "+")}/${String(artist).replaceAll(" ", "+")}`, apiUrl);
+        var RequestURL = new URL(`${String(track).replaceAll(" ", "+")}/+${String(artist).replaceAll(" ", "+")}`, apiUrl);
     } else {
-        var RequestURL = new URL(`download/${String(track).replaceAll(" ", "+")}`, apiUrl);
+        var RequestURL = new URL(`${String(track).replaceAll(" ", "+")}`, apiUrl);
     }
-
-    if (del) { var RequestURL = new URL(`delete/${songId}`, "http://127.0.0.1:5000/"); };
-
     async function doAsyncCall(url) {
         const serverResult = await fetch(url);
         return serverResult.json();
