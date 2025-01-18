@@ -1,7 +1,2 @@
-requests
-re
-moviepy
 pytubefix
 flask
-mutagen
-json
