@@ -15,7 +15,7 @@
     "youtube",
     "search_query"
   ],
-  "author": "defNotPau, whiter0s",
+  "author": "defNotPau, Darkmatter-D",
   "license": "MIT",
   "dependencies": {
     "@discordjs/voice": "^0.18.0",

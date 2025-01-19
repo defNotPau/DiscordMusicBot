@@ -1,7 +1,7 @@
 const { ApplicationCommandOptionType, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require("@discordjs/voice");
 
-const apiHandler = require('./../../handlers/apiHandler');
+const apiHandler = require('./../../handlers/api/downloadHandler');
 
 const confirm = new ButtonBuilder()
     .setStyle(ButtonStyle.Primary).setCustomId('confirm').setLabel('✅');
