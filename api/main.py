@@ -5,7 +5,9 @@ import datetime
 import os
 
 from yt_dlp import YoutubeDL
+from yt_dlp import YoutubeDL
 app = flask.Flask(__name__)
+
 
 
 @app.route("/<video_name>")
@@ -18,7 +20,7 @@ def download_video(video_name):
         #append it to the list
         url_list.append(video.watch_url)
     #return the file after extracting the info
-    return flask.send_file("./output/"+YoutubeDL({'extract_audio': True, 'format': 'bestaudio', 'outtmpl': 'api/output/%(id)s.mp3'}).extract_info(url_list[0],download=True).get('title',None)+".mp3", mimetype="audio/mpeg")
+    return flask.send_file("./output/"+YoutubeDL({'extract_audio': True, 'format': 'bestaudio', 'outtmpl': './output/%(id)s.mp3'}).extract_info(url_list[0],download=True).get('id',None)+".mp3", mimetype="audio/mpeg")
 
 
 #app route for getting jsonified info for the video
@@ -37,9 +39,10 @@ def info(video_name):
             "name": info.get('title',None),
             "duration": str(datetime.timedelta(seconds=info.get('duration',None))),
             "author": str(info.get('uploader',None)),
-            "id" : str(info.get('id',None)+".mp3")
+            "file_id" : str(info.get('id',None)+".mp3")
     }
     return json.dumps(formats)
+#delete everything in the outputs folder
 #delete everything in the outputs folder
 @app.route("/del")
 def delete_files():

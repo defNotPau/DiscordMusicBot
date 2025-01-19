@@ -1,3 +1,4 @@
+
 const apiUrl = "http://127.0.0.1:5000/";
 const apiInfo = "http://127.0.0.1:5000/info/"
 
@@ -21,3 +22,4 @@ module.exports = async (track, artist) => {
     jsonResult = await doAsyncCall(jsonURL.href);
     return(jsonResult.json());   
 }
+

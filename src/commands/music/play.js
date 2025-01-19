@@ -35,7 +35,7 @@ module.exports = {
 
         const optionsEmbed = new EmbedBuilder()
             .setColor(0x0099FF)
-            .setTitle(`You serched for: ${(interaction.options.getString("song"))}`)
+            .setTitle(`You serched for: ${(interaction.options.getString("song")).replaceAll("+", " ")}`)
             .setDescription("Select confirm, or cancel ;c")
             .setTimestamp()
             .addFields(
@@ -57,18 +57,16 @@ module.exports = {
             await confirmation.deferReply();
 
             if (confirmation.customId === 'confirm') {
-                if (!interaction.member.voice.channel) return interaction.reply("You need to be in a Voice Channel to play a song.");
-                const connection = joinVoiceChannel({
+                if (!interaction.member.voice.channel) return interaction.editReply("You need to be in a Voice Channel to play a song.");
+                const song_resource = createAudioPlayer();
+                joinVoiceChannel({
                     channelId: interaction.member.voice.channelId,
                     guildId: interaction.guildId,
                     adapterCreator: interaction.guild.voiceAdapterCreator
-                });
-
-                const song_resource = createAudioResource(`./../../../api/output/${requestedSong.id}`);
-                const player = createAudioPlayer();
+                }).subscribe(song_resource)
+                let resource = createAudioResource(`../../../api/output/${String()}`);
                 
-                connection.subscribe(player);
-                player.play(song_resource);
+                song_resource.play(resource);
             }
 
             if (confirmation.customId === 'cancel') {
