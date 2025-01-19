@@ -21,7 +21,7 @@ def download_video(video_name):
         #append it to the list
         url_list.append(video.watch_url)
     #return the file after extracting the info
-    return flask.send_file("src/outputs/"+YoutubeDL({'extract_audio': True, 'format': 'bestaudio', 'outtmpl': 'src/outputs/%(title)s.mp3'}).extract_info(url_list[0],download=True).get('title',None)+".mp3", mimetype="audio/mpeg")
+    return flask.send_file("src/output/"+YoutubeDL({'extract_audio': True, 'format': 'bestaudio', 'outtmpl': 'src/output/%(title)s.mp3'}).extract_info(url_list[0],download=True).get('title',None)+".mp3", mimetype="audio/mpeg")
 
 
 #app route for getting jsonified info for the video
@@ -47,9 +47,9 @@ def info(video_name):
 @app.route("/del")
 def delete_files():
     #for each file in the directory delete it
-    for file in os.listdir("src/outputs/"):
+    for file in os.listdir("src/output/"):
         #delete it
-        os.remove("src/outputs/"+file)
+        os.remove("src/output/"+file)
     return True
 
 
