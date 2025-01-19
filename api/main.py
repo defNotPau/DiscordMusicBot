@@ -36,6 +36,7 @@ def info(video_name):
     formats = {
             "name": info.get('title',None),
             "duration": str(datetime.timedelta(seconds=info.get('duration',None))),
+            "author": str(info.get('uploader',None)),
             "id" : str(info.get('id',None)+".mp3")
     }
     return json.dumps(formats)
