@@ -2,6 +2,7 @@ const { ApplicationCommandOptionType, EmbedBuilder, ButtonBuilder, ButtonStyle, 
 const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require("@discordjs/voice");
 
 const apiHandler = require('./../../handlers/api/downloadHandler');
+const downloadHandler = require("./../../handlers/api/downloadHandler");
 
 const confirm = new ButtonBuilder()
     .setStyle(ButtonStyle.Primary).setCustomId('confirm').setLabel('✅');
@@ -28,7 +29,7 @@ module.exports = {
 
     callback: async (client, interaction) => {
         await interaction.deferReply();
-        var requestedSong = await apiHandler(interaction.options.getString("song"), interaction.options.getString("artist"));
+        var requestedSong = await downloadHandler(interaction.options.getString("song"), interaction.options.getString("artist"));
         console.log(requestedSong);
 
         if (!requestedSong) { interaction.reply("Error... contact devs :D"); };
