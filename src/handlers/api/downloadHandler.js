@@ -1,12 +1,12 @@
 const apiUrl = "http://127.0.0.1:5000/";
-const apiInfo = "http://127.0.0.1:5000/info"
+const apiInfo = "http://127.0.0.1:5000/info/"
 
 module.exports = async (track, artist) => {
-    var trackURL;
+    var trackName;
     if (artist) { 
-        var trackURL = new URL(`${String(track).replaceAll(" ", "+")}-${String(artist).replaceAll(" ", "+")}`);
+        var trackName = `${String(track).replaceAll(" ", "+")}-${String(artist).replaceAll(" ", "+")}`;
     } else {
-        var trackURL = new URL(`${String(track).replaceAll(" ", "+")}`);
+        var trackName = `${String(track).replaceAll(" ", "+")}`;
     }
     
     async function doAsyncCall(url) {
@@ -14,10 +14,10 @@ module.exports = async (track, artist) => {
         return serverResult;
     }
 
-    var songURL = new URL(trackURL, apiUrl);
+    var songURL = new URL(trackName, apiUrl);
     await doAsyncCall(songURL.href)
 
-    var jsonURL = new URL(trackURL, apiInfo);
+    var jsonURL = new URL(trackName, apiInfo);
     jsonResult = await doAsyncCall(jsonURL.href);
     return(jsonResult.json());   
 }
