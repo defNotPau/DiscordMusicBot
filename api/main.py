@@ -13,7 +13,7 @@ def download_video(video_name):
     video = pytubefix.YouTube(url_list[1])
     video_options = video.streams.get_audio_only()
     video_options.download()
-    return flask.send_file("../"+video.title+".m4a", mimetype="audio/mpeg")
+    return flask.send_file("../output/"+video.title+".m4a", mimetype="audio/mpeg")
     
 if __name__ == '__main__':
    app.run(debug=True)

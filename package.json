@@ -1,25 +1,26 @@
 {
-  "name": "musicbot",
+  "name": "discordmusicbot",
   "version": "0.0.1",
-  "description": "basic and open-source discord music bot :D",
+  "description": "welp, discord banned most music bots we knew of so like we're making one ourselves",
   "main": "src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/app.js",
+    "nodemon": "nodemon src/app.js"
   },
   "keywords": [
-    "discord"
+    "discord",
+    "bot",
+    "music",
+    "api",
+    "youtube",
+    "search_query"
   ],
-  "author": "",
+  "author": "defNotPau, whiter0s",
   "license": "MIT",
   "dependencies": {
-    "@discordjs/opus": "^0.9.0",
-    "@discordjs/voice": "^0.17.0",
-    "discord.js": "^14.15.3",
-    "dotenv": "^16.4.5",
-    "ffmpeg-static": "^5.2.0",
-    "libsodium-wrappers": "^0.7.13"
-  },
-  "devDependencies": {
-    "typescript": "^5.5.2"
+    "@discordjs/voice": "^0.18.0",
+    "discord.js": "^14.17.3",
+    "dotenv": "^16.4.7",
+    "nodemon": "^3.1.9"
   }
 }

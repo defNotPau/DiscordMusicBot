@@ -28,12 +28,8 @@ module.exports = {
 
     callback: async (client, interaction) => {
         await interaction.deferReply();
-
-        if (interaction.options.getString("artist")) {
-            var requestedSong = await apiHandler(interaction.options.getString("song"), interaction.options.getString("artist"), false);
-        } else {
-            var requestedSong = await apiHandler(interaction.options.getString("song"), false);
-        }
+        var requestedSong = await apiHandler(interaction.options.getString("song"), interaction.options.getString("artist"));
+        console.log(requestedSong);
 
         if (!requestedSong) { interaction.reply("Error... contact devs :D"); };
 
